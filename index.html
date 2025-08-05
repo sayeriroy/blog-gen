@@ -6,110 +6,151 @@
   <title>Barbie Blog Generator ✨</title>
   <style>
     body {
-      background: linear-gradient(to right, #ffc0cb, #ffe4e1);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      padding: 40px;
-      color: #8b005d;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 3em;
-      text-shadow: 1px 1px 3px #ff69b4;
+      background: #0b0c2a;
+      color: #fdfdff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
       max-width: 700px;
-      margin: 0 auto;
-      background: white;
-      padding: 30px;
+      margin: 60px auto;
+      background: linear-gradient(145deg, #1e1f4d, #151635);
+      box-shadow: 0 0 25px rgba(255, 0, 179, 0.3);
       border-radius: 20px;
-      box-shadow: 0 0 20px #ffb6c1;
+      padding: 30px 40px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #ff69b4;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px #ffb6c1;
     }
 
     label {
+      display: block;
+      margin-top: 20px;
       font-weight: bold;
-      font-size: 1.2em;
+      color: #f4d7ee;
     }
 
     input, textarea {
       width: 100%;
+      margin-top: 5px;
       padding: 12px;
-      margin-top: 8px;
-      margin-bottom: 16px;
+      background: #222347;
+      color: white;
+      border: none;
       border-radius: 10px;
-      border: 2px solid #ff69b4;
-      font-size: 1em;
+      font-size: 1rem;
+      box-shadow: inset 0 0 10px rgba(255, 105, 180, 0.2);
     }
 
     button {
-      background: #ff69b4;
+      background: #ff1493;
       color: white;
+      padding: 15px 25px;
       border: none;
-      padding: 15px 30px;
-      font-size: 1.2em;
-      border-radius: 10px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-top: 25px;
+      width: 100%;
       cursor: pointer;
-      box-shadow: 0 4px #c71585;
+      box-shadow: 0 0 15px #ff69b4, 0 0 30px #ff69b4;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
 
     button:hover {
-      background: #ff1493;
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493;
     }
 
-    #blogOutput {
-      white-space: pre-wrap;
-      margin-top: 20px;
-      background: #fff0f5;
+    .output {
+      margin-top: 30px;
       padding: 20px;
+      background: #16173a;
       border-radius: 10px;
+      box-shadow: inset 0 0 10px rgba(255, 105, 180, 0.3);
+      white-space: pre-wrap;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #888;
     }
   </style>
 </head>
 <body>
-  <h1>💅 Barbie Blog Generator 💅</h1>
   <div class="container">
-    <label for="topic">Blog Topic:</label>
-    <input type="text" id="topic" placeholder="e.g., Fire safety audits for warehouses"/>
+    <h1>✨ Barbie Blog Generator ✨</h1>
 
-    <label for="audience">Target Audience:</label>
-    <input type="text" id="audience" placeholder="e.g., Facility Managers"/>
+    <label for="topic">Topic:</label>
+    <input type="text" id="topic" placeholder="e.g. Fire Safety Checklist for Restaurants" />
 
-    <button onclick="generateBlog()">✨ Generate Blog ✨</button>
+    <label for="audience">Audience:</label>
+    <input type="text" id="audience" placeholder="e.g. Facility Managers, Safety Officers" />
 
-    <div id="blogOutput"></div>
+    <label for="cta">Call to Action:</label>
+    <input type="text" id="cta" placeholder="e.g. Book a free fire inspection demo" />
+
+    <button onclick="generateBlog()">Generate Blog</button>
+
+    <div id="output" class="output"></div>
+  </div>
+
+  <div class="footer">
+    Powered by ✨ Zenfire AI ✨
   </div>
 
   <script>
     async function generateBlog() {
       const topic = document.getElementById('topic').value;
       const audience = document.getElementById('audience').value;
-      const outputDiv = document.getElementById('blogOutput');
+      const cta = document.getElementById('cta').value;
+      const output = document.getElementById('output');
+      output.innerHTML = 'Generating your Barbie-style blog... 💅';
 
-      outputDiv.innerHTML = 'Generating blog... 💻📝';
+      const fullPrompt = `
+You are Zenfire AI, a world-class blog writer for a fire inspection SaaS.
+Generate a 3000-word blog post that's modern, deeply insightful, and built to convert MQLs.
+Tone: authoritative but not arrogant, urgent but not alarmist, modern and slightly disruptive.
+Audience: ${audience}.
+Topic: ${topic}.
+End with a strong CTA: ${cta}.
+Make the blog feel like it was written by a human — with flow, emotions, and depth.
+Never mention it's AI-generated.
+      `;
 
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxejXfdryorCE0-Qm7kk6JxHAXopvnbnr6g5Zuj0ElPkUJF89Ohkci1ykJ70aJBbCt3/exec', {
-          method: 'POST',
+        const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Authorization": "Bearer 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",  // Replace with your OpenRouter key
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify({ topic, audience })
+          body: JSON.stringify({
+            model: "groq/llama3-70b-8192",
+            messages: [
+              { role: "system", content: "You are a highly skilled B2B SaaS blog writer." },
+              { role: "user", content: fullPrompt }
+            ]
+          })
         });
 
-        const data = await response.json();
-
-        if (data.blog) {
-          outputDiv.innerHTML = `<h3>✨ AI Blog Output ✨</h3><p>${data.blog.replace(/\n/g, '<br/>')}</p>`;
-        } else {
-          outputDiv.innerHTML = `<p>❌ Error: ${data.error || "No blog returned"}</p>`;
-        }
+        const data = await res.json();
+        const blog = data.choices[0].message.content;
+        output.innerText = blog;
       } catch (err) {
-        outputDiv.innerHTML = `<p>❌ Failed to fetch blog. CORS or network issue.</p>`;
+        output.innerText = "Oops! Something went wrong. Please check your API key or internet connection.";
         console.error(err);
       }
     }
   </script>
 </body>
 </html>
-
