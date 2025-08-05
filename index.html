@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barbie Blog Generator 💖</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      color: #c2185b;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #d81b60;
+      text-shadow: 1px 1px #fff;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-size: 1.2rem;
+      margin-top: 20px;
+      display: block;
+    }
+
+    input {
+      padding: 10px;
+      margin-top: 5px;
+      width: 300px;
+      border: 2px solid #f48fb1;
+      border-radius: 10px;
+      background-color: #fff0f5;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 12px 25px;
+      background-color: #f06292;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 2px 2px 10px #f8bbd0;
+    }
+
+    button:hover {
+      background-color: #ec407a;
+    }
+
+    #result {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #fff;
+      border: 3px dashed #f48fb1;
+      border-radius: 15px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: pre-wrap;
+      color: #880e4f;
+    }
+  </style>
+</head>
+<body>
+  <h1>💖 Barbie Blog Generator 💖</h1>
+
+  <label>Blog Title</label>
+  <input type="text" id="blogTitle" placeholder="e.g. Fire Safety for Smart Homes" />
+
+  <label>Word Limit</label>
+  <input type="number" id="wordLimit" value="3000" />
+
+  <button onclick="generateBlog()">✨ Generate Blog ✨</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function generateBlog() {
+      const title = document.getElementById("blogTitle").value;
+      const wordLimit = document.getElementById("wordLimit").value;
+      const url = 'https://script.google.com/macros/s/AKfycbxCRwnTaP_rlvBOpA1TOy75Y_zX6Jh-PhT7TR2rdn_R754iUYmzwyfC65kTVFlVUamK/exec'; // ← Replace this!
+
+      const payload = {
+        title: title,
+        wordLimit: wordLimit
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        document.getElementById("result").textContent = data.response || "No response from server.";
+      } catch (err) {
+        console.error("Error:", err);
+        document.getElementById("result").textContent = "Something went wrong 💔";
+      }
+    }
+  </script>
+</body>
+</html>
