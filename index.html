@@ -1,111 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Barbie Blog Generator 💖</title>
+  <title>Barbie Blog Generator ✨</title>
   <style>
     body {
-      background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
+      background: linear-gradient(to right, #ffc0cb, #ffe4e1);
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      color: #c2185b;
-      text-align: center;
       padding: 40px;
+      color: #8b005d;
     }
 
     h1 {
-      font-size: 3rem;
-      color: #d81b60;
-      text-shadow: 1px 1px #fff;
-      margin-bottom: 30px;
+      text-align: center;
+      font-size: 3em;
+      text-shadow: 1px 1px 3px #ff69b4;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ffb6c1;
     }
 
     label {
-      font-size: 1.2rem;
-      margin-top: 20px;
-      display: block;
+      font-weight: bold;
+      font-size: 1.2em;
     }
 
-    input {
-      padding: 10px;
-      margin-top: 5px;
-      width: 300px;
-      border: 2px solid #f48fb1;
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      margin-bottom: 16px;
       border-radius: 10px;
-      background-color: #fff0f5;
-      font-size: 1rem;
+      border: 2px solid #ff69b4;
+      font-size: 1em;
     }
 
     button {
-      margin-top: 30px;
-      padding: 12px 25px;
-      background-color: #f06292;
+      background: #ff69b4;
       color: white;
       border: none;
-      border-radius: 25px;
-      font-size: 1rem;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 2px 2px 10px #f8bbd0;
+      box-shadow: 0 4px #c71585;
     }
 
     button:hover {
-      background-color: #ec407a;
+      background: #ff1493;
     }
 
-    #result {
-      margin-top: 40px;
-      padding: 20px;
-      background-color: #fff;
-      border: 3px dashed #f48fb1;
-      border-radius: 15px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
+    #blogOutput {
       white-space: pre-wrap;
-      color: #880e4f;
+      margin-top: 20px;
+      background: #fff0f5;
+      padding: 20px;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>💖 Barbie Blog Generator 💖</h1>
+  <h1>💅 Barbie Blog Generator 💅</h1>
+  <div class="container">
+    <label for="topic">Blog Topic:</label>
+    <input type="text" id="topic" placeholder="e.g., Fire safety audits for warehouses"/>
 
-  <label>Blog Title</label>
-  <input type="text" id="blogTitle" placeholder="e.g. Fire Safety for Smart Homes" />
+    <label for="audience">Target Audience:</label>
+    <input type="text" id="audience" placeholder="e.g., Facility Managers"/>
 
-  <label>Word Limit</label>
-  <input type="number" id="wordLimit" value="3000" />
+    <button onclick="generateBlog()">✨ Generate Blog ✨</button>
 
-  <button onclick="generateBlog()">✨ Generate Blog ✨</button>
-
-  <div id="result"></div>
+    <div id="blogOutput"></div>
+  </div>
 
   <script>
     async function generateBlog() {
-      const title = document.getElementById("blogTitle").value;
-      const wordLimit = document.getElementById("wordLimit").value;
-      const url = 'https://script.google.com/macros/s/AKfycbxPogQky6SWq-z4EncF-d1OE1uYn9MHHd1dqOENea4cby2QCNitQjoJtSmh_t4ymVtD/exec'; // ← Replace this!
+      const topic = document.getElementById('topic').value;
+      const audience = document.getElementById('audience').value;
+      const outputDiv = document.getElementById('blogOutput');
 
-      const payload = {
-        title: title,
-        wordLimit: wordLimit
-      };
+      outputDiv.innerHTML = 'Generating blog... 💻📝';
 
       try {
-        const response = await fetch(url, {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxejXfdryorCE0-Qm7kk6JxHAXopvnbnr6g5Zuj0ElPkUJF89Ohkci1ykJ70aJBbCt3/exec', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ topic, audience })
         });
 
         const data = await response.json();
-        document.getElementById("result").textContent = data.response || "No response from server.";
+
+        if (data.blog) {
+          outputDiv.innerHTML = `<h3>✨ AI Blog Output ✨</h3><p>${data.blog.replace(/\n/g, '<br/>')}</p>`;
+        } else {
+          outputDiv.innerHTML = `<p>❌ Error: ${data.error || "No blog returned"}</p>`;
+        }
       } catch (err) {
-        console.error("Error:", err);
-        document.getElementById("result").textContent = "Something went wrong 💔";
+        outputDiv.innerHTML = `<p>❌ Failed to fetch blog. CORS or network issue.</p>`;
+        console.error(err);
       }
     }
   </script>
 </body>
 </html>
+
